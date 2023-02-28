@@ -1,6 +1,6 @@
 import kenlm
 
-model = kenlm.Model('language/en.arpa')
+model = kenlm.Model('../input_data/language/en.arpa')
 sentence = "my sentence exemple ."
 score = model.score(sentence)
 print("Log probability:", score)
@@ -10,17 +10,23 @@ with open('../output_data/training/src/source.sent-level.en', 'r') as input_file
     for line in input_file:
         line = line.strip()
         log_prob = model.score(line)
-        output_file.write(str(log_prob) + '\n')
+        # normalisation
+        log_prob_per_length = log_prob/len(line)
+        # print(F"prob={log_prob} ==> prob/length = {log_prob_per_length} ==> line = {line}")
+        output_file.write(str(log_prob_per_length) + '\n')
 
 
 # spanish 
-model = kenlm.Model('language/sp.arpa')
+model = kenlm.Model('../input_data/language/sp.arpa')
 
 with open('../output_data/training/tgt1/target.sent-level.sp', 'r') as input_file, open('../output_data/training/tgt1/target.sent-level_score.sp', 'w') as output_file:
     for line in input_file:
         line = line.strip()
         log_prob = model.score(line)
-        output_file.write(str(log_prob) + '\n')
+        # normalisation
+        log_prob_per_length = log_prob/len(line)
+        # print(F"prob={log_prob} ==> prob/length = {log_prob_per_length} ==> line = {line}")
+        output_file.write(str(log_prob_per_length) + '\n')
 
 
 # combine with output from quest++
